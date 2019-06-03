@@ -27,6 +27,7 @@ class HomeContainer extends React.Component {
 
   public render() {
     const { champions } = this.state;
+    console.log(champions);
     return <HomePresenter data={champions} />;
   }
 }

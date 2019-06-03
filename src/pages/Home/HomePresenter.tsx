@@ -50,9 +50,9 @@ const HomePresenter: React.SFC<IProps> = ({ data }) => {
       <ChampionsContainer>
         <Title>Select a Champion (Ctrl + F)</Title>
         <Champions>
-          {data.map(champion => (
-            <Link to={`/detail/${champion.key}`}>
-              <Champion key={champion.key}>{champion.name}</Champion>
+          {data.map(champ => (
+            <Link key={champ.key} to={`/detail/${champ.key}`}>
+              <Champion>{champ.name}</Champion>
             </Link>
           ))}
         </Champions>
