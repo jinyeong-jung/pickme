@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "src/typed-components";
 
 const Container = styled.div`
@@ -26,7 +27,9 @@ const Input = styled.input`
 
 const Menu = () => (
   <Container>
-    <Title>PICK ME</Title>
+    <Link to="/">
+      <Title>PICK ME</Title>
+    </Link>
     <Input />
   </Container>
 );
