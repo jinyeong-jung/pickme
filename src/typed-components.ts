@@ -1,9 +1,6 @@
 import * as styledComponents from "styled-components";
 import { ThemedStyledComponentsModule } from "styled-components";
-
-interface IThemeInterface {
-  blackColor: string;
-}
+import { IThemeInterface } from "./theme";
 
 const {
   default: styled,
