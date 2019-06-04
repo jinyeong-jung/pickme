@@ -7,8 +7,11 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   public state = {
     championId: 0,
     championInfo: {},
+    lost: [],
     matches: [],
-    myMatches: []
+    myMatches: [],
+    winRate: 0,
+    won: []
   };
 
   public getMatches = async () => {
@@ -17,9 +20,23 @@ class DetailContainer extends React.Component<RouteComponentProps> {
       const { data } = response;
       const ordered = [...data].sort(this.sortArray("championId"));
       const myMatches = this.findMyMatches(ordered);
+
+      let won = [];
+      let lost = [];
+      for (let i = 0; i <= myMatches.length - 1; i++) {
+        const key = Object.keys(myMatches[i])[3];
+        if (myMatches[i][key]) {
+          won = won.concat(myMatches[i]);
+        } else {
+          lost = lost.concat(myMatches[i]);
+        }
+      }
+
       this.setState({
+        lost,
         matches: ordered,
-        myMatches
+        myMatches,
+        won
       });
     } catch (error) {
       console.log(error);
@@ -68,7 +85,6 @@ class DetailContainer extends React.Component<RouteComponentProps> {
         let j = mid;
         while (championId === Number(matches[i].championId)) {
           myMatches = myMatches.concat(matches[i]);
-
           i--;
         }
         while (championId === Number(matches[j].championId)) {
@@ -91,8 +107,8 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   }
 
   public render() {
-    const { championInfo, myMatches } = this.state;
-    console.log(myMatches);
+    const { championInfo } = this.state;
+    console.log(this.state);
     return <DetailPresenter championInfo={championInfo} />;
   }
 }
