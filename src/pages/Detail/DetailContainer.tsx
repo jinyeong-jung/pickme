@@ -172,9 +172,15 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   }
 
   public render() {
-    const { championInfo, winRate } = this.state;
+    const { championInfo, matchesByChamps, winRate } = this.state;
     console.log(this.state);
-    return <DetailPresenter championInfo={championInfo} winRate={winRate} />;
+    return (
+      <DetailPresenter
+        championInfo={championInfo}
+        winRate={winRate}
+        matchesByChamps={matchesByChamps}
+      />
+    );
   }
 }
 

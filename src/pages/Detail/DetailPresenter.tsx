@@ -21,9 +21,9 @@ const ChampionInfoContainer = styled.div`
   width: 50%;
 `;
 
-const WinRateContainer = styled.div`
+const TotalWinRateContainer = styled.div`
   width: 50%;
-  background-color: white;
+  background-color: ${props => props.theme.greyColor};
 `;
 
 const ChampionInfoName = styled.span`
@@ -45,12 +45,25 @@ const ChampionInfoBlurb = styled.div`
   line-height: 150%;
 `;
 
+const WinRateListContainer = styled.div`
+  height: 100%;
+  margin: 0 30px 50px 30px;
+  padding: 30px;
+  background-color: ${props => props.theme.whiteColor};
+  text-align: center;
+`;
+
 interface IProps {
   championInfo?: any;
   winRate?: number;
+  matchesByChamps?: object;
 }
 
-const DetailPresenter: React.SFC<IProps> = ({ championInfo, winRate }) => (
+const DetailPresenter: React.SFC<IProps> = ({
+  championInfo,
+  winRate,
+  matchesByChamps
+}) => (
   <Container>
     <Menu />
     <InfoContainer>
@@ -61,10 +74,17 @@ const DetailPresenter: React.SFC<IProps> = ({ championInfo, winRate }) => (
           <ChampionInfoBlurb>{championInfo.blurb}</ChampionInfoBlurb>
         </ChampionInfoContainer>
       )}
-      <WinRateContainer>
+      <TotalWinRateContainer>
         Your Win Rate of {championInfo.name} is {winRate}%!
-      </WinRateContainer>
+      </TotalWinRateContainer>
     </InfoContainer>
+    <WinRateListContainer>
+      {matchesByChamps
+        ? "hello"
+        : `No data found : You haven't played a game with ${
+            championInfo.name
+          } yet.`}
+    </WinRateListContainer>
   </Container>
 );
 
