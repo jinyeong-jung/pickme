@@ -5,7 +5,7 @@ import DetailPresenter from "./DetailPresenter";
 
 class DetailContainer extends React.Component<RouteComponentProps> {
   public state = {
-    championId: "",
+    championInfo: {},
     matches: []
   };
 
@@ -21,23 +21,26 @@ class DetailContainer extends React.Component<RouteComponentProps> {
     }
   };
 
-  public getChampionId = () => {
+  public saveChampionInfo = () => {
     const {
-      match: { params }
+      location: {
+        state: { championInfo }
+      }
     } = this.props;
-    const value = Object.values(params).join();
-    this.setState({ championId: value });
+    this.setState({
+      championInfo
+    });
   };
 
   public componentDidMount() {
-    this.getChampionId();
     this.getMatches();
+    this.saveChampionInfo();
   }
   public render() {
-    const { championId, matches } = this.state;
-    console.log(championId);
+    const { championInfo, matches } = this.state;
+    console.log(championInfo);
     console.log(matches);
-    return <DetailPresenter />;
+    return <DetailPresenter championInfo={championInfo} />;
   }
 }
 
