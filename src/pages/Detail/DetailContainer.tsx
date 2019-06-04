@@ -7,10 +7,9 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   public state = {
     championId: 0,
     championInfo: {},
-    lostChampions: [],
+    matchesByChamps: {},
     myMatches: [],
-    winRate: 0,
-    wonChampions: []
+    winRate: 0
   };
 
   public getMatches = async () => {
@@ -34,13 +33,15 @@ class DetailContainer extends React.Component<RouteComponentProps> {
       const wonChampions = this.MakeOneArray(won);
       const lostChampions = this.MakeOneArray(lost);
 
+      this.SortMatchesByChamps(wonChampions, true);
+      const result = this.SortMatchesByChamps(lostChampions, false);
+
       const winRate = ((won.length / myMatches.length) * 100).toFixed(2);
 
       this.setState({
-        lostChampions,
+        matchesByChamps: result,
         myMatches,
-        winRate,
-        wonChampions
+        winRate
       });
     } catch (error) {
       console.log(error);
@@ -54,6 +55,57 @@ class DetailContainer extends React.Component<RouteComponentProps> {
     }
     matchedChampions.sort();
     return matchedChampions;
+  };
+
+  public SortMatchesByChamps = (array: any, win: boolean) => {
+    const { matchesByChamps } = this.state;
+    let result = matchesByChamps;
+    for (let i = 0; i <= array.length - 1; i++) {
+      if (Object.keys(result).includes(array[i])) {
+        if (win) {
+          const newObj = {
+            ...matchesByChamps,
+            [array[i]]: {
+              ...matchesByChamps[array[i]],
+              won: matchesByChamps[array[i]].won + 1
+            }
+          };
+          result = Object.assign(result, newObj);
+        } else {
+          const newObj = {
+            ...matchesByChamps,
+            [array[i]]: {
+              ...matchesByChamps[array[i]],
+              lost: matchesByChamps[array[i]].lost + 1
+            }
+          };
+          result = Object.assign(result, newObj);
+        }
+      } else {
+        if (win) {
+          const newObj = {
+            ...matchesByChamps,
+            [array[i]]: {
+              lost: 0,
+              won: 1
+            }
+          };
+          result = Object.assign(result, newObj);
+        } else {
+          const newObj = {
+            ...matchesByChamps,
+            [array[i]]: {
+              lost: 1,
+              won: 0
+            }
+          };
+          result = Object.assign(result, newObj);
+        }
+      }
+      const obj = result[array[i]];
+      obj.winRate = ((obj.won / (obj.won + obj.lost)) * 100).toFixed(2);
+    }
+    return result;
   };
 
   public saveChampionInfo = () => {
