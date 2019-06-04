@@ -7,11 +7,10 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   public state = {
     championId: 0,
     championInfo: {},
-    lost: [],
-    matches: [],
+    lostChampions: [],
     myMatches: [],
     winRate: 0,
-    won: []
+    wonChampions: []
   };
 
   public getMatches = async () => {
@@ -32,15 +31,29 @@ class DetailContainer extends React.Component<RouteComponentProps> {
         }
       }
 
+      const wonChampions = this.MakeOneArray(won);
+      const lostChampions = this.MakeOneArray(lost);
+
+      const winRate = ((won.length / myMatches.length) * 100).toFixed(2);
+
       this.setState({
-        lost,
-        matches: ordered,
+        lostChampions,
         myMatches,
-        won
+        winRate,
+        wonChampions
       });
     } catch (error) {
       console.log(error);
     }
+  };
+
+  public MakeOneArray = (array: any) => {
+    let matchedChampions = [];
+    for (let i = 0; i <= array.length - 1; i++) {
+      matchedChampions = matchedChampions.concat(array[i].theirTeam);
+    }
+    matchedChampions.sort();
+    return matchedChampions;
   };
 
   public saveChampionInfo = () => {
@@ -107,9 +120,9 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   }
 
   public render() {
-    const { championInfo } = this.state;
+    const { championInfo, winRate } = this.state;
     console.log(this.state);
-    return <DetailPresenter championInfo={championInfo} />;
+    return <DetailPresenter championInfo={championInfo} winRate={winRate} />;
   }
 }
 

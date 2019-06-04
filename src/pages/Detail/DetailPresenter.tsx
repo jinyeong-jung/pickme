@@ -10,10 +10,20 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const ChampionInfoContainer = styled.div`
+const InfoContainer = styled.div`
   height: 40%;
-  width: 50%;
+  width: 100%;
+  display: flex;
   padding: 50px 30px;
+`;
+
+const ChampionInfoContainer = styled.div`
+  width: 50%;
+`;
+
+const WinRateContainer = styled.div`
+  width: 50%;
+  background-color: white;
 `;
 
 const ChampionInfoName = styled.span`
@@ -37,18 +47,24 @@ const ChampionInfoBlurb = styled.div`
 
 interface IProps {
   championInfo?: any;
+  winRate?: number;
 }
 
-const DetailPresenter: React.SFC<IProps> = ({ championInfo }) => (
+const DetailPresenter: React.SFC<IProps> = ({ championInfo, winRate }) => (
   <Container>
     <Menu />
-    {championInfo && (
-      <ChampionInfoContainer>
-        <ChampionInfoName>{championInfo.name}</ChampionInfoName>
-        <ChampionInfoTitle>{championInfo.title}</ChampionInfoTitle>
-        <ChampionInfoBlurb>{championInfo.blurb}</ChampionInfoBlurb>
-      </ChampionInfoContainer>
-    )}
+    <InfoContainer>
+      {championInfo && (
+        <ChampionInfoContainer>
+          <ChampionInfoName>{championInfo.name}</ChampionInfoName>
+          <ChampionInfoTitle>{championInfo.title}</ChampionInfoTitle>
+          <ChampionInfoBlurb>{championInfo.blurb}</ChampionInfoBlurb>
+        </ChampionInfoContainer>
+      )}
+      <WinRateContainer>
+        Your Win Rate of {championInfo.name} is {winRate}%!
+      </WinRateContainer>
+    </InfoContainer>
   </Container>
 );
 
