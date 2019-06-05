@@ -1,5 +1,5 @@
 // action types
-const SAVE_CHAMPIONS = "champion/SELECT_CHAMPION";
+const SAVE_CHAMPIONS = "champion/SAVE_CHAMPIONS";
 
 // action creators
 export const saveChampions = champions => ({
@@ -9,11 +9,11 @@ export const saveChampions = champions => ({
 
 // initial state
 export interface IChampionState {
-  champions: object;
+  champions: [];
 }
 
 const initialState: IChampionState = {
-  champions: {}
+  champions: []
 };
 
 // reducers

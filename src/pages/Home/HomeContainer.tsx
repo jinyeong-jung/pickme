@@ -1,21 +1,34 @@
 import React from "react";
+import { connect } from "react-redux";
 import * as api from "../../lib/api";
+import { saveChampions } from "../../modules/champion";
 import HomePresenter from "./HomePresenter";
 
-class HomeContainer extends React.Component {
+interface IProps {
+  saveChampionsList: (
+    champions: any
+  ) => {
+    champions: any;
+    type: string;
+  };
+  champions: [];
+}
+
+class HomeContainer extends React.Component<IProps> {
   public state = {
     champions: []
   };
 
   public getChampions = async () => {
     try {
+      const { saveChampionsList } = this.props;
+
       const response = await api.getChampions();
       const {
         data: { data }
       } = response;
-      this.setState({
-        champions: Object.values(data)
-      });
+
+      saveChampionsList(Object.values(data));
     } catch (error) {
       console.log(error);
     }
@@ -26,9 +39,20 @@ class HomeContainer extends React.Component {
   }
 
   public render() {
-    const { champions } = this.state;
+    const { champions } = this.props;
     return <HomePresenter data={champions} />;
   }
 }
 
-export default HomeContainer;
+const mapStateToProps = state => ({
+  champions: state.championReducer.champions
+});
+
+const mapDispatchToProps = dispatch => ({
+  saveChampionsList: champions => dispatch(saveChampions(champions))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeContainer);
