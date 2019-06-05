@@ -58,7 +58,7 @@ const HomePresenter: React.SFC<IProps> = ({ data }) => {
                 pathname: `/detail/${champ.name}`,
 
                 // edit below later
-                state: { championInfo: champ, allChampions: data }
+                state: { championInfo: champ }
               }}
             >
               <Champion>{champ.name}</Champion>

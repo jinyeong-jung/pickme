@@ -1,23 +1,55 @@
 import React from "react";
+import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import * as api from "../../lib/api";
+import {
+  saveChampionIndex,
+  saveChampionInfo,
+  saveWinningRate
+} from "../../modules/champion";
+import { saveMatchesByChampions } from "../../modules/match";
+import { getMatches } from "../../utils/api";
+import { sortArray } from "../../utils/functions";
 import DetailPresenter from "./DetailPresenter";
 
-class DetailContainer extends React.Component<RouteComponentProps> {
-  public state = {
-    allChampions: [],
-    championId: 0,
-    championInfo: {},
-    matchesByChamps: [],
-    myMatches: [],
-    winRate: 0
+interface IProps extends RouteComponentProps {
+  allChampions: [];
+  championId: any;
+  championInfo: any;
+  matchesByChamps: any;
+  winRate: any;
+  saveChampionId: (
+    id: any
+  ) => {
+    id: any;
+    type: string;
   };
+  saveChampionInformation: (
+    info: any
+  ) => {
+    championInfo: any;
+    type: string;
+  };
+  saveMatchesByChamps: (
+    matches: any
+  ) => {
+    matches: any;
+    type: string;
+  };
+  saveWinRate: (
+    rate: any
+  ) => {
+    rate: any;
+    type: string;
+  };
+}
 
+class DetailContainer extends React.Component<IProps> {
   public getMatches = async () => {
     try {
-      const response = await api.getMatches();
+      const { saveWinRate, saveMatchesByChamps } = this.props;
+      const response = await getMatches();
       const { data } = response;
-      const ordered = [...data].sort(this.sortArray("championId"));
+      const ordered = [...data].sort(sortArray("championId"));
       const myMatches = this.findMyMatches(ordered);
 
       let won = [];
@@ -48,16 +80,13 @@ class DetailContainer extends React.Component<RouteComponentProps> {
       );
       const matchesByChamps = results[1]
         .map(item => Object.values(item).find(i => typeof i === "object"))
-        .sort(this.sortArray("-won"))
-        .sort(this.sortArray("-winRate"));
+        .sort(sortArray("-won"))
+        .sort(sortArray("-winRate"));
 
       const winRate = ((won.length / myMatches.length) * 100).toFixed(2);
 
-      this.setState({
-        matchesByChamps,
-        myMatches,
-        winRate
-      });
+      saveWinRate(winRate);
+      saveMatchesByChamps(matchesByChamps);
     } catch (error) {
       console.log(error);
     }
@@ -80,7 +109,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   ) => {
     let newObject = defaultObj;
     const newArray = defaultArr;
-    const { allChampions } = this.state;
+    const { allChampions } = this.props;
 
     for (let i = 0; i <= inputArray.length - 1; i++) {
       const champIndex = allChampions
@@ -160,38 +189,18 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   public savePropsAsState = () => {
     const {
       location: {
-        state: { championInfo, allChampions }
-      }
+        state: { championInfo }
+      },
+      saveChampionId,
+      saveChampionInformation
     } = this.props;
-    allChampions.sort(this.sortArray("key"));
-    this.setState({
-      allChampions,
-      championId: Number(championInfo.key),
-      championInfo
-    });
+
+    saveChampionInformation(championInfo);
+    saveChampionId(Number(championInfo.key));
   };
 
-  public sortArray(property) {
-    let sortOrder = 1;
-
-    if (property[0] === "-") {
-      sortOrder = -1;
-      property = property.substr(1);
-    }
-
-    return (a, b) => {
-      const first = Number(a[property]);
-      const second = Number(b[property]);
-      if (sortOrder === -1) {
-        return first > second ? -1 : first < second ? 1 : 0;
-      } else {
-        return first < second ? -1 : first > second ? 1 : 0;
-      }
-    };
-  }
-
   public findMyMatches = matches => {
-    const { championId } = this.state;
+    const { championId } = this.props;
     let myMatches = [];
     let end = matches.length - 1;
     let start = 0;
@@ -233,7 +242,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   }
 
   public render() {
-    const { championInfo, matchesByChamps, winRate } = this.state;
+    const { championInfo, matchesByChamps, winRate } = this.props;
     return (
       <DetailPresenter
         championInfo={championInfo}
@@ -244,4 +253,22 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   }
 }
 
-export default DetailContainer;
+const mapStateToProps = ({ championReducer, matchReducer }) => ({
+  allChampions: championReducer.champions,
+  championId: championReducer.championIndex,
+  championInfo: championReducer.championInformation,
+  matchesByChamps: matchReducer.matchesByChampions,
+  winRate: championReducer.winningRate
+});
+
+const mapDispatchToProps = dispatch => ({
+  saveChampionId: id => dispatch(saveChampionIndex(id)),
+  saveChampionInformation: info => dispatch(saveChampionInfo(info)),
+  saveMatchesByChamps: matches => dispatch(saveMatchesByChampions(matches)),
+  saveWinRate: rate => dispatch(saveWinningRate(rate))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DetailContainer);

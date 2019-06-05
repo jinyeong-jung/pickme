@@ -1,7 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import * as api from "../../lib/api";
 import { saveChampions } from "../../modules/champion";
+import { getChampions } from "../../utils/api";
+import { sortArray } from "../../utils/functions";
 import HomePresenter from "./HomePresenter";
 
 interface IProps {
@@ -23,12 +24,11 @@ class HomeContainer extends React.Component<IProps> {
     try {
       const { saveChampionsList } = this.props;
 
-      const response = await api.getChampions();
+      const response = await getChampions();
       const {
         data: { data }
       } = response;
-
-      saveChampionsList(Object.values(data));
+      saveChampionsList(Object.values(data).sort(sortArray("name")));
     } catch (error) {
       console.log(error);
     }
