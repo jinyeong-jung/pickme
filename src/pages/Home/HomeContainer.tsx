@@ -29,6 +29,10 @@ class HomeContainer extends React.Component<IProps> {
         data: { data }
       } = response;
       saveChampionsList(Object.values(data).sort(sortArray("name")));
+      localStorage.setItem(
+        "allChampions",
+        JSON.stringify(Object.values(data).sort(sortArray("name")))
+      );
     } catch (error) {
       console.log(error);
     }

@@ -1,6 +1,8 @@
 import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Menu from "../../components/Menu/index";
+import { saveChampionInfo } from "../../modules/champion";
 import styled from "../../typed-components";
 
 const Container = styled.div`
@@ -42,9 +44,21 @@ const Champion = styled.div`
 
 interface IProps {
   data?: any;
+  saveChampionInformation: (
+    info: any
+  ) => {
+    championInfo: any;
+    type: string;
+  };
 }
 
-const HomePresenter: React.SFC<IProps> = ({ data }) => {
+const HomePresenter: React.SFC<IProps> = ({
+  data,
+  saveChampionInformation
+}) => {
+  const handleChampClick = info => {
+    saveChampionInformation(info);
+  };
   return (
     <Container>
       <Menu />
@@ -53,6 +67,7 @@ const HomePresenter: React.SFC<IProps> = ({ data }) => {
         <Champions>
           {data.map(champ => (
             <Link
+              onClick={() => handleChampClick(champ)}
               key={champ.key}
               to={{
                 pathname: `/detail/${champ.name}`,
@@ -68,4 +83,15 @@ const HomePresenter: React.SFC<IProps> = ({ data }) => {
   );
 };
 
-export default HomePresenter;
+const mapStateToProps = ({ championReducer }) => ({
+  championInfo: championReducer.championInformation
+});
+
+const mapDispatchToProps = dispatch => ({
+  saveChampionInformation: info => dispatch(saveChampionInfo(info))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomePresenter);

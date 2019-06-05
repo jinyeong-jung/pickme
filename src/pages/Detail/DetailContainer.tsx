@@ -23,16 +23,16 @@ interface IProps extends RouteComponentProps {
     id: any;
     type: string;
   };
-  saveChampionInformation: (
-    info: any
-  ) => {
-    championInfo: any;
-    type: string;
-  };
   saveMatchesByChamps: (
     matches: any
   ) => {
     matches: any;
+    type: string;
+  };
+  saveChampionInformation: (
+    info: any
+  ) => {
+    championInfo: any;
     type: string;
   };
   saveWinRate: (
@@ -110,7 +110,9 @@ class DetailContainer extends React.Component<IProps> {
   ) => {
     let newObject = defaultObj;
     const newArray = defaultArr;
-    const { allChampions } = this.props;
+    const allChampions = JSON.parse(
+      localStorage.getItem("allChampions") || "no data"
+    );
 
     for (let i = 0; i <= inputArray.length - 1; i++) {
       const champIndex = allChampions
@@ -187,19 +189,6 @@ class DetailContainer extends React.Component<IProps> {
     return [newObject, newArray];
   };
 
-  public savePropsAsState = () => {
-    const {
-      location: {
-        state: { championInfo }
-      },
-      saveChampionId,
-      saveChampionInformation
-    } = this.props;
-
-    saveChampionInformation(championInfo);
-    saveChampionId(Number(championInfo.key));
-  };
-
   public findMyMatches = matches => {
     const { championId } = this.props;
     let myMatches = [];
@@ -237,9 +226,42 @@ class DetailContainer extends React.Component<IProps> {
     return myMatches;
   };
 
+  public getChampInfoFromParams = () => {
+    const {
+      match: { params },
+      saveChampionInformation,
+      saveChampionId
+    } = this.props;
+
+    const name = Object.values(params)[0];
+
+    const allChampions = JSON.parse(
+      localStorage.getItem("allChampions") || "no data"
+    );
+    const keys = Object.keys(allChampions[0]);
+    const newInfo = allChampions
+      .map(champion => {
+        if (champion[keys[3]] === name) {
+          return champion;
+        } else {
+          return;
+        }
+      })
+      .filter(item => item !== undefined)[0];
+
+    saveChampionInformation(newInfo);
+    saveChampionId(Number(newInfo.key));
+  };
+
+  public savePropsAsState = () => {
+    const { championInfo, saveChampionId } = this.props;
+    saveChampionId(Number(championInfo.key));
+  };
+
   public componentDidMount() {
-    this.getMatches();
     this.savePropsAsState();
+    this.getChampInfoFromParams();
+    this.getMatches();
   }
 
   public render() {
