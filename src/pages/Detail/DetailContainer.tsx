@@ -86,6 +86,13 @@ class DetailContainer extends React.Component<RouteComponentProps> {
             [inputArray[i]]: {
               ...newObject[inputArray[i]],
               id: inputArray[i],
+              winRate: (
+                ((newObject[inputArray[i]].won + 1) /
+                  (newObject[inputArray[i]].won +
+                    1 +
+                    newObject[inputArray[i]].lost)) *
+                100
+              ).toFixed(2),
               won: newObject[inputArray[i]].won + 1
             }
           };
@@ -96,7 +103,14 @@ class DetailContainer extends React.Component<RouteComponentProps> {
             [inputArray[i]]: {
               ...newObject[inputArray[i]],
               id: inputArray[i],
-              lost: newObject[inputArray[i]].lost + 1
+              lost: newObject[inputArray[i]].lost + 1,
+              winRate: (
+                (newObject[inputArray[i]].won /
+                  (newObject[inputArray[i]].won +
+                    newObject[inputArray[i]].lost +
+                    1)) *
+                100
+              ).toFixed(2)
             }
           };
           newObject = Object.assign(newObject, obj);
@@ -108,6 +122,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
             [inputArray[i]]: {
               id: inputArray[i],
               lost: 0,
+              winRate: ((1 / (0 + 1)) * 100).toFixed(2),
               won: 1
             }
           };
@@ -118,6 +133,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
             [inputArray[i]]: {
               id: inputArray[i],
               lost: 1,
+              winRate: ((0 / (0 + 1)) * 100).toFixed(2),
               won: 0
             }
           };
@@ -125,8 +141,6 @@ class DetailContainer extends React.Component<RouteComponentProps> {
           newObject = Object.assign(newObject, obj);
         }
       }
-      const item = newObject[inputArray[i]];
-      item.winRate = ((item.won / (item.won + item.lost)) * 100).toFixed(2);
     }
     return [newObject, newArray];
   };

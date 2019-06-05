@@ -3,7 +3,7 @@ import Menu from "../../components/Menu/Menu";
 import styled from "../../typed-components";
 
 const Container = styled.div`
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: ${props => props.theme.blackColor};
   display: flex;
@@ -48,9 +48,36 @@ const ChampionInfoBlurb = styled.div`
 const WinRateListContainer = styled.div`
   height: 100%;
   margin: 0 30px 50px 30px;
-  padding: 30px;
   background-color: ${props => props.theme.whiteColor};
   text-align: center;
+`;
+
+const WinRateListTitles = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30% 20% 20% 30%;
+`;
+
+const WinRateListTitle = styled.span`
+  background-color: ${props => props.theme.greyColor};
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+  height: 50px;
+  line-height: 50px;
+  color: ${props => props.theme.whiteColor};
+  font-size: 14px;
+`;
+
+const MatchContainer = styled.div`
+  padding: 10px 0;
+  display: grid;
+  grid-template-columns: 30% 20% 20% 30%;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+`;
+
+const MatchElement = styled.div`
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
 `;
 
 interface IProps {
@@ -75,14 +102,34 @@ const DetailPresenter: React.SFC<IProps> = ({
         </ChampionInfoContainer>
       )}
       <TotalWinRateContainer>
-        {winRate ? <div>Your Win Rate of {championInfo.name} is {winRate}%!</div> : <div>No data found</div>}
+        {winRate ? (
+          <div>
+            Your Win Rate of {championInfo.name} is {winRate}%!
+          </div>
+        ) : (
+          "No data found"
+        )}
       </TotalWinRateContainer>
     </InfoContainer>
     <WinRateListContainer>
+      <WinRateListTitles>
+        <WinRateListTitle>Champion Name</WinRateListTitle>
+        <WinRateListTitle>Win</WinRateListTitle>
+        <WinRateListTitle>Lost</WinRateListTitle>
+        <WinRateListTitle>Win Rate</WinRateListTitle>
+      </WinRateListTitles>
       {matchesByChamps
-        ? matchesByChamps.map((match, i) => (
-            <div key={i}>{JSON.stringify(match)}</div>
-          ))
+        ? matchesByChamps.map((match, i) => {
+            const keys = Object.keys(match);
+            return (
+              <MatchContainer key={i}>
+                <MatchElement>ID: {match[keys[0]]}</MatchElement>
+                <MatchElement>WIN: {match[keys[3]]}</MatchElement>
+                <MatchElement>LOST: {match[keys[1]]}</MatchElement>
+                <MatchElement>WIN RATE: {match[keys[2]]}</MatchElement>
+              </MatchContainer>
+            );
+          })
         : `No data found : You haven't played a game with ${
             championInfo.name
           } yet.`}
