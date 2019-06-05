@@ -14,18 +14,32 @@ const InfoContainer = styled.div`
   height: 40%;
   width: 100%;
   display: flex;
-  padding: 50px 30px;
+  padding: 50px 100px;
 `;
 
 const ChampionInfoContainer = styled.div`
-  width: 50%;
+  width: 40%;
+  margin-right: 10%;
 `;
 
 const TotalWinRateContainer = styled.div`
   width: 50%;
-  background-color: ${props => props.theme.greyColor};
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
 `;
 
+const TotalWinRateText = styled.div`
+  color: ${props => props.theme.whiteColor};
+  font-weight: 300;
+  margin-bottom: 15px;
+`;
+
+const TotalWinRateNumber = styled.div`
+  color: ${props => props.theme.whiteColor};
+  font-size: 50px;
+`;
 const ChampionInfoName = styled.span`
   color: ${props => props.theme.whiteColor};
   font-size: 30px;
@@ -47,7 +61,7 @@ const ChampionInfoBlurb = styled.div`
 
 const WinRateListContainer = styled.div`
   height: 100%;
-  margin: 0 30px 50px 30px;
+  margin: 0 100px 50px 100px;
   background-color: ${props => props.theme.whiteColor};
   text-align: center;
 `;
@@ -55,7 +69,7 @@ const WinRateListContainer = styled.div`
 const WinRateListTitles = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: 30% 20% 20% 30%;
+  grid-template-columns: 30% 40% 30%;
 `;
 
 const WinRateListTitle = styled.span`
@@ -70,8 +84,8 @@ const WinRateListTitle = styled.span`
 const MatchContainer = styled.div`
   padding: 10px 0;
   display: grid;
-  grid-template-columns: 30% 20% 20% 30%;
-  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+  grid-template-columns: 30% 40% 30%;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
 `;
 
 const MatchElement = styled.div`
@@ -101,38 +115,44 @@ const DetailPresenter: React.SFC<IProps> = ({
           <ChampionInfoBlurb>{championInfo.blurb}</ChampionInfoBlurb>
         </ChampionInfoContainer>
       )}
-      <TotalWinRateContainer>
-        {winRate ? (
-          <div>
-            Your Win Rate of {championInfo.name} is {winRate}%!
-          </div>
-        ) : (
-          "No data found"
-        )}
-      </TotalWinRateContainer>
+
+      {winRate ? (
+        <TotalWinRateContainer>
+          <TotalWinRateText>
+            Your Win Rate of {championInfo.name} is..
+          </TotalWinRateText>
+          <TotalWinRateNumber>{winRate} %</TotalWinRateNumber>
+        </TotalWinRateContainer>
+      ) : (
+        "No data found"
+      )}
     </InfoContainer>
     <WinRateListContainer>
       <WinRateListTitles>
         <WinRateListTitle>Champion Name</WinRateListTitle>
-        <WinRateListTitle>Win</WinRateListTitle>
-        <WinRateListTitle>Lost</WinRateListTitle>
+        <WinRateListTitle>Matches ( win / lose )</WinRateListTitle>
         <WinRateListTitle>Win Rate</WinRateListTitle>
       </WinRateListTitles>
-      {matchesByChamps
-        ? matchesByChamps.map((match, i) => {
-            const keys = Object.keys(match);
-            return (
-              <MatchContainer key={i}>
-                <MatchElement>ID: {match[keys[0]]}</MatchElement>
-                <MatchElement>WIN: {match[keys[3]]}</MatchElement>
-                <MatchElement>LOST: {match[keys[1]]}</MatchElement>
-                <MatchElement>WIN RATE: {match[keys[2]]}</MatchElement>
-              </MatchContainer>
-            );
-          })
-        : `No data found : You haven't played a game with ${
-            championInfo.name
-          } yet.`}
+      {matchesByChamps ? (
+        matchesByChamps.map((match, i) => {
+          const keys = Object.keys(match);
+          return (
+            <MatchContainer key={i + match[keys[0]]}>
+              <MatchElement>ID: {match[keys[0]]}</MatchElement>
+              <MatchElement>
+                {match[keys[3]] + match[keys[1]]} ({match[keys[3]]}/
+                {match[keys[1]]})
+              </MatchElement>
+              <MatchElement>{match[keys[2]]} %</MatchElement>
+            </MatchContainer>
+          );
+        })
+      ) : (
+        <MatchContainer>
+          No data found : You haven't played a game with {championInfo.name}{" "}
+          yet.
+        </MatchContainer>
+      )}
     </WinRateListContainer>
   </Container>
 );

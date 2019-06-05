@@ -47,6 +47,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
       );
       const matchesByChamps = results[1]
         .map(item => Object.values(item).find(i => typeof i === "object"))
+        .sort(this.sortArray("-won"))
         .sort(this.sortArray("-winRate"));
 
       const winRate = ((won.length / myMatches.length) * 100).toFixed(2);
