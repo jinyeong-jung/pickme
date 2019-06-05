@@ -18,7 +18,6 @@ class DetailContainer extends React.Component<RouteComponentProps> {
       const { data } = response;
       const ordered = [...data].sort(this.sortArray("championId"));
       const myMatches = this.findMyMatches(ordered);
-      console.log(ordered, myMatches);
 
       let won = [];
       let lost = [];
@@ -167,17 +166,10 @@ class DetailContainer extends React.Component<RouteComponentProps> {
     const { championId } = this.state;
     let myMatches = [];
     let end = matches.length - 1;
-    for (let start = 0; start <= end; start++) {
+    let start = 0;
+    while (start <= end) {
       const mid = Math.floor((start + end) / 2);
-      console.log(
-        "start",
-        start,
-        mid,
-        end,
-        "|",
-        championId,
-        Number(matches[mid].championId)
-      );
+
       if (championId === Number(matches[mid].championId)) {
         let i = mid - 1;
         let j = mid;
@@ -189,39 +181,11 @@ class DetailContainer extends React.Component<RouteComponentProps> {
           myMatches = myMatches.concat(matches[j]);
           j++;
         }
-        console.log(
-          "1",
-          start,
-          mid,
-          end,
-          "|",
-          championId,
-          Number(matches[mid].championId)
-        );
-
         break;
       } else if (championId > Number(matches[mid].championId)) {
         start = mid + 1;
-        console.log(
-          "2",
-          start,
-          mid,
-          end,
-          "|",
-          championId,
-          Number(matches[mid].championId)
-        );
       } else {
         end = mid - 1;
-        console.log(
-          "3",
-          start,
-          mid,
-          end,
-          "|",
-          championId,
-          Number(matches[mid].championId)
-        );
       }
     }
     return myMatches;
