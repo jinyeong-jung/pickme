@@ -1,3 +1,5 @@
+import produce from "immer";
+
 // action types
 const SAVE_MATCHES_BY_CHAMPIONS = "match/SAVE_MATCHES_BY_CHAMPIONS";
 
@@ -20,7 +22,9 @@ const initialState: IChampionState = {
 const matchReducer = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_MATCHES_BY_CHAMPIONS:
-      return { ...state, matchesByChampions: action.matches };
+      return produce(state, draft => {
+        draft.matchesByChampions = action.matches;
+      });
     default:
       return state;
   }

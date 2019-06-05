@@ -1,3 +1,5 @@
+import produce from "immer";
+
 // action types
 const SAVE_CHAMPIONS = "champion/SAVE_CHAMPIONS";
 const SAVE_CHAMPION_INFO = "champion/SAVE_CHAMPION_INFO";
@@ -11,7 +13,7 @@ export const saveChampions = champions => ({
 });
 
 export const saveChampionInfo = info => ({
-  championInfo: info,
+  info,
   type: SAVE_CHAMPION_INFO
 });
 
@@ -44,13 +46,21 @@ const initialState: IChampionState = {
 const championReducer = (state = initialState, action) => {
   switch (action.type) {
     case SAVE_CHAMPIONS:
-      return { ...state, champions: action.champions };
+      return produce(state, draft => {
+        draft.champions = action.champions;
+      });
     case SAVE_CHAMPION_INFO:
-      return { ...state, championInformation: action.championInfo };
+      return produce(state, draft => {
+        draft.championInformation = action.info;
+      });
     case SAVE_CHAMPION_ID:
-      return { ...state, championIndex: action.id };
+      return produce(state, draft => {
+        draft.championIndex = action.id;
+      });
     case SAVE_WIN_RATE:
-      return { ...state, winningRate: action.rate };
+      return produce(state, draft => {
+        draft.winningRate = action.rate;
+      });
     default:
       return state;
   }

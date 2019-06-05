@@ -82,6 +82,7 @@ class DetailContainer extends React.Component<IProps> {
         .map(item => Object.values(item).find(i => typeof i === "object"))
         .sort(sortArray("-won"))
         .sort(sortArray("-winRate"));
+      console.log(matchesByChamps);
 
       const winRate = ((won.length / myMatches.length) * 100).toFixed(2);
 
