@@ -82,7 +82,6 @@ class DetailContainer extends React.Component<IProps> {
         .map(item => Object.values(item).find(i => typeof i === "object"))
         .sort(sortArray("-won"))
         .sort(sortArray("-winRate"));
-      console.log(matchesByChamps);
 
       const winRate = ((won.length / myMatches.length) * 100).toFixed(2);
 
@@ -136,7 +135,7 @@ class DetailContainer extends React.Component<IProps> {
             }
           };
           newObject = Object.assign(newObject, obj);
-          newArray.push(obj);
+          newArray[i - 1] = obj;
         } else {
           const obj = {
             [inputArray[i]]: {
@@ -154,7 +153,7 @@ class DetailContainer extends React.Component<IProps> {
             }
           };
           newObject = Object.assign(newObject, obj);
-          newArray.push(obj);
+          newArray[i - 1] = obj;
         }
       } else {
         if (win) {
