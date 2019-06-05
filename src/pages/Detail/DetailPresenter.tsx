@@ -56,7 +56,7 @@ const WinRateListContainer = styled.div`
 interface IProps {
   championInfo?: any;
   winRate?: number;
-  matchesByChamps?: object;
+  matchesByChamps?: any;
 }
 
 const DetailPresenter: React.SFC<IProps> = ({
@@ -75,12 +75,14 @@ const DetailPresenter: React.SFC<IProps> = ({
         </ChampionInfoContainer>
       )}
       <TotalWinRateContainer>
-        Your Win Rate of {championInfo.name} is {winRate}%!
+        {winRate ? <div>Your Win Rate of {championInfo.name} is {winRate}%!</div> : <div>No data found</div>}
       </TotalWinRateContainer>
     </InfoContainer>
     <WinRateListContainer>
       {matchesByChamps
-        ? "hello"
+        ? matchesByChamps.map((match, i) => (
+            <div key={i}>{JSON.stringify(match)}</div>
+          ))
         : `No data found : You haven't played a game with ${
             championInfo.name
           } yet.`}
