@@ -229,6 +229,7 @@ class DetailContainer extends React.Component<IProps> {
   public getChampInfoFromParams = () => {
     const {
       match: { params },
+      history,
       saveChampionInformation,
       saveChampionId
     } = this.props;
@@ -250,7 +251,11 @@ class DetailContainer extends React.Component<IProps> {
       .filter(item => item !== undefined)[0];
 
     saveChampionInformation(newInfo);
-    saveChampionId(Number(newInfo.key));
+    if (!newInfo) {
+      history.push("/");
+    } else {
+      saveChampionId(Number(newInfo.key));
+    }
   };
 
   public savePropsAsState = () => {
