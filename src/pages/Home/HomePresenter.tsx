@@ -4,6 +4,7 @@ import Menu from "../../components/Menu/index";
 import styled from "../../typed-components";
 
 const Container = styled.div`
+  min-height: 100vh;
   height: 100%;
   width: 100%;
   background-color: ${props => props.theme.blackColor};

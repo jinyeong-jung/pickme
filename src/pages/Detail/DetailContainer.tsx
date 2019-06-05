@@ -83,22 +83,11 @@ class DetailContainer extends React.Component<RouteComponentProps> {
     const { allChampions } = this.state;
 
     for (let i = 0; i <= inputArray.length - 1; i++) {
-      // console.log(inputArray[i]);
-      // inputArray[i] :: match한 챔피언의 아이디
-
-      // console.log(
-      //   allChampions
-      //     .map(champ => Object.values(champ)[2])
-      //     .indexOf(inputArray[i])
-      // );
       const champIndex = allChampions
         .map(champ => Object.values(champ)[2])
         .indexOf(inputArray[i]);
-      // allChampions array의 각 object의 key 값과 위 아이디 비교
-
-      // console.log(Object.values(allChampions[champIndex])[3]);
       const champName = Object.values(allChampions[champIndex])[3];
-      // 같으면 allChampions array의 각 object의 name 값 가져오기
+
       if (Object.keys(newObject).includes(inputArray[i])) {
         if (win) {
           const obj = {
@@ -214,11 +203,19 @@ class DetailContainer extends React.Component<RouteComponentProps> {
         let j = mid;
         while (championId === Number(matches[i].championId)) {
           myMatches = myMatches.concat(matches[i]);
-          i--;
+          if (i !== 0) {
+            i--;
+          } else {
+            break;
+          }
         }
         while (championId === Number(matches[j].championId)) {
           myMatches = myMatches.concat(matches[j]);
-          j++;
+          if (i < matches.length) {
+            j++;
+          } else {
+            break;
+          }
         }
         break;
       } else if (championId > Number(matches[mid].championId)) {

@@ -3,6 +3,7 @@ import Menu from "../../components/Menu/Menu";
 import styled from "../../typed-components";
 
 const Container = styled.div`
+  min-height: 100vh;
   height: 100%;
   width: 100%;
   background-color: ${props => props.theme.blackColor};
@@ -29,6 +30,7 @@ const TotalWinRateContainer = styled.div`
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
+  color: ${props => props.theme.whiteColor};
 `;
 
 const TotalWinRateText = styled.div`
@@ -95,6 +97,14 @@ const MatchElement = styled.div`
   font-size: 14px;
 `;
 
+const NoData = styled.div`
+  width: 100%;
+  text-align: center;
+  height: 200px;
+  line-height: 200px;
+  color: ${props => props.theme.blackColor};
+`;
+
 interface IProps {
   championInfo?: any;
   winRate?: number;
@@ -125,7 +135,7 @@ const DetailPresenter: React.SFC<IProps> = ({
           <TotalWinRateNumber>{winRate} %</TotalWinRateNumber>
         </TotalWinRateContainer>
       ) : (
-        "No data found"
+        <TotalWinRateContainer>No data found</TotalWinRateContainer>
       )}
     </InfoContainer>
     <WinRateListContainer>
@@ -134,7 +144,7 @@ const DetailPresenter: React.SFC<IProps> = ({
         <WinRateListTitle>Matches ( win / lose )</WinRateListTitle>
         <WinRateListTitle>Win Rate</WinRateListTitle>
       </WinRateListTitles>
-      {matchesByChamps ? (
+      {matchesByChamps.length !== 0 ? (
         matchesByChamps.map((match, i) => {
           const keys = Object.keys(match);
           return (
@@ -149,10 +159,10 @@ const DetailPresenter: React.SFC<IProps> = ({
           );
         })
       ) : (
-        <MatchContainer>
+        <NoData>
           No data found : You haven't played a game with {championInfo.name}{" "}
           yet.
-        </MatchContainer>
+        </NoData>
       )}
     </WinRateListContainer>
   </Container>
