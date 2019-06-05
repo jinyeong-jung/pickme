@@ -5,6 +5,7 @@ import DetailPresenter from "./DetailPresenter";
 
 class DetailContainer extends React.Component<RouteComponentProps> {
   public state = {
+    allChampions: [],
     championId: 0,
     championInfo: {},
     matchesByChamps: [],
@@ -79,14 +80,32 @@ class DetailContainer extends React.Component<RouteComponentProps> {
   ) => {
     let newObject = defaultObj;
     const newArray = defaultArr;
+    const { allChampions } = this.state;
 
     for (let i = 0; i <= inputArray.length - 1; i++) {
+      // console.log(inputArray[i]);
+      // inputArray[i] :: match한 챔피언의 아이디
+
+      // console.log(
+      //   allChampions
+      //     .map(champ => Object.values(champ)[2])
+      //     .indexOf(inputArray[i])
+      // );
+      const champIndex = allChampions
+        .map(champ => Object.values(champ)[2])
+        .indexOf(inputArray[i]);
+      // allChampions array의 각 object의 key 값과 위 아이디 비교
+
+      // console.log(Object.values(allChampions[champIndex])[3]);
+      const champName = Object.values(allChampions[champIndex])[3];
+      // 같으면 allChampions array의 각 object의 name 값 가져오기
       if (Object.keys(newObject).includes(inputArray[i])) {
         if (win) {
           const obj = {
             [inputArray[i]]: {
               ...newObject[inputArray[i]],
               id: inputArray[i],
+              name: champName,
               winRate: (
                 ((newObject[inputArray[i]].won + 1) /
                   (newObject[inputArray[i]].won +
@@ -105,6 +124,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
               ...newObject[inputArray[i]],
               id: inputArray[i],
               lost: newObject[inputArray[i]].lost + 1,
+              name: champName,
               winRate: (
                 (newObject[inputArray[i]].won /
                   (newObject[inputArray[i]].won +
@@ -123,6 +143,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
             [inputArray[i]]: {
               id: inputArray[i],
               lost: 0,
+              name: champName,
               winRate: ((1 / (0 + 1)) * 100).toFixed(2),
               won: 1
             }
@@ -134,6 +155,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
             [inputArray[i]]: {
               id: inputArray[i],
               lost: 1,
+              name: champName,
               winRate: ((0 / (0 + 1)) * 100).toFixed(2),
               won: 0
             }
@@ -146,13 +168,15 @@ class DetailContainer extends React.Component<RouteComponentProps> {
     return [newObject, newArray];
   };
 
-  public saveChampionInfo = () => {
+  public savePropsAsState = () => {
     const {
       location: {
-        state: { championInfo }
+        state: { championInfo, allChampions }
       }
     } = this.props;
+    allChampions.sort(this.sortArray("key"));
     this.setState({
+      allChampions,
       championId: Number(championInfo.key),
       championInfo
     });
@@ -208,7 +232,7 @@ class DetailContainer extends React.Component<RouteComponentProps> {
 
   public componentDidMount() {
     this.getMatches();
-    this.saveChampionInfo();
+    this.savePropsAsState();
   }
 
   public render() {

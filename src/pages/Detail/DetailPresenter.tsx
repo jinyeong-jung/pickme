@@ -8,6 +8,7 @@ const Container = styled.div`
   background-color: ${props => props.theme.blackColor};
   display: flex;
   flex-direction: column;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
 `;
 
 const InfoContainer = styled.div`
@@ -138,12 +139,12 @@ const DetailPresenter: React.SFC<IProps> = ({
           const keys = Object.keys(match);
           return (
             <MatchContainer key={i + match[keys[0]]}>
-              <MatchElement>ID: {match[keys[0]]}</MatchElement>
+              <MatchElement>{match[keys[2]]}</MatchElement>
               <MatchElement>
-                {match[keys[3]] + match[keys[1]]} ({match[keys[3]]}/
+                {match[keys[4]] + match[keys[1]]} ({match[keys[4]]}/
                 {match[keys[1]]})
               </MatchElement>
-              <MatchElement>{match[keys[2]]} %</MatchElement>
+              <MatchElement>{match[keys[3]]} %</MatchElement>
             </MatchContainer>
           );
         })
