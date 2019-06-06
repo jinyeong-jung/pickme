@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Menu from "../../components/Menu/index";
@@ -56,6 +56,10 @@ const HomePresenter: React.SFC<IProps> = ({
   data,
   saveChampionInformation
 }) => {
+  useEffect(() => {
+    console.log("rendering");
+    console.log(data);
+  });
   const handleChampClick = info => {
     saveChampionInformation(info);
   };

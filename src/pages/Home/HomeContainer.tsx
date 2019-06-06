@@ -37,16 +37,13 @@ class HomeContainer extends React.Component<IProps> {
     }
   };
 
-  public shouldComponentUpdate(nextProps) {
-    return this.props.champions.length !== nextProps.champions.length;
-  }
-
   public componentDidMount() {
     this.getChampions();
   }
 
   public render() {
     const { champions } = this.props;
+    console.log("render");
     return <HomePresenter data={champions} />;
   }
 }
