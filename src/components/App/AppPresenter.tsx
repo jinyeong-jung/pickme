@@ -6,8 +6,8 @@ import Home from "src/pages/Home";
 const AppPresenter: React.SFC = () => (
   <BrowserRouter>
     <Switch>
-      <Route path="/" exact={true} component={Home} />
-      <Route path="/detail/:championName" component={Detail} />
+      <Route path="/pickme" exact={true} component={Home} />
+      <Route path="/pickme/detail/:championName" component={Detail} />
     </Switch>
   </BrowserRouter>
 );

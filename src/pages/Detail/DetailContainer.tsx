@@ -56,6 +56,7 @@ class DetailContainer extends React.Component<IProps> {
 
       const { data } = response;
       const ordered = [...data].sort(sortArray("championId"));
+      console.log(this.props);
       const myMatches = findMyMatches(ordered, this.props.championId);
 
       let won = [];
@@ -125,7 +126,7 @@ class DetailContainer extends React.Component<IProps> {
 
     saveChampionInformation(newInfo);
     if (!newInfo) {
-      history.push("/");
+      history.push("/pickme");
     } else {
       saveChampionId(Number(newInfo.key));
     }

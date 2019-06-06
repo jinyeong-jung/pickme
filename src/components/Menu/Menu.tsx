@@ -20,7 +20,7 @@ const Title = styled.h1`
 const Menu = () => {
   return (
     <Container>
-      <Link to="/">
+      <Link to="/pickme">
         <Title>PICK ME</Title>
       </Link>
     </Container>

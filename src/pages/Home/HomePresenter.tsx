@@ -70,7 +70,7 @@ const HomePresenter: React.SFC<IProps> = ({
               onClick={() => handleChampClick(champ)}
               key={champ.key}
               to={{
-                pathname: `/detail/${champ.name}`
+                pathname: `/pickme/detail/${champ.name}`
               }}
             >
               <Champion>{champ.name}</Champion>

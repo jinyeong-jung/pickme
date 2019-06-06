@@ -37,7 +37,7 @@ export const findMyMatches = (matches, championId) => {
       }
       while (championId === Number(matches[j].championId)) {
         myMatches = myMatches.concat(matches[j]);
-        if (i < matches.length) {
+        if (j < matches.length - 1) {
           j++;
         } else {
           break;
