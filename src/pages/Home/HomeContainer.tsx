@@ -43,7 +43,6 @@ class HomeContainer extends React.Component<IProps> {
 
   public render() {
     const { champions } = this.props;
-    console.log("render");
     return <HomePresenter data={champions} />;
   }
 }
