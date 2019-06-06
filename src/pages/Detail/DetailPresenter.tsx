@@ -126,7 +126,6 @@ const DetailPresenter: React.SFC<IProps> = ({
           <ChampionInfoBlurb>{championInfo.blurb}</ChampionInfoBlurb>
         </ChampionInfoContainer>
       )}
-
       {winRate ? (
         <TotalWinRateContainer>
           <TotalWinRateText>

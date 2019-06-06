@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { saveChampions } from "../../modules/champion";
-import { getChampions } from "../../utils/api";
+import { getChampions as getChampionsFn } from "../../utils/api";
 import { sortArray } from "../../utils/functions";
 import HomePresenter from "./HomePresenter";
 
@@ -23,8 +23,7 @@ class HomeContainer extends React.Component<IProps> {
   public getChampions = async () => {
     try {
       const { saveChampionsList } = this.props;
-
-      const response = await getChampions();
+      const response = await getChampionsFn();
       const {
         data: { data }
       } = response;
@@ -37,6 +36,10 @@ class HomeContainer extends React.Component<IProps> {
       console.log(error);
     }
   };
+
+  public shouldComponentUpdate(nextProps) {
+    return this.props.champions.length !== nextProps.champions.length;
+  }
 
   public componentDidMount() {
     this.getChampions();

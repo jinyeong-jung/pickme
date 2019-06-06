@@ -70,8 +70,7 @@ const HomePresenter: React.SFC<IProps> = ({
               onClick={() => handleChampClick(champ)}
               key={champ.key}
               to={{
-                pathname: `/detail/${champ.name}`,
-                state: { championInfo: champ }
+                pathname: `/detail/${champ.name}`
               }}
             >
               <Champion>{champ.name}</Champion>
@@ -83,9 +82,7 @@ const HomePresenter: React.SFC<IProps> = ({
   );
 };
 
-const mapStateToProps = ({ championReducer }) => ({
-  championInfo: championReducer.championInformation
-});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
   saveChampionInformation: info => dispatch(saveChampionInfo(info))
